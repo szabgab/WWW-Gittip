@@ -5,6 +5,8 @@ use warnings;
 use LWP::Simple qw(get);
 use JSON qw(from_json);
 
+our $VERSION = '0.01';
+
 =head1 NAME
 
 WWW::Gittip - Implementing the Gittip API more or less
@@ -32,7 +34,7 @@ Each element in the array has the following fields:
         "charges"      => 25.29,
         "date"         => "2012-06-22",
         "total_gifts"  => 62.08,
-        "total_users": => 621,
+        "total_users"  => 621,
         "weekly_gifts" => 30.08,
         "withdrawals"  => 0.00
     },
