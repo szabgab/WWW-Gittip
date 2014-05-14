@@ -7,6 +7,7 @@ WriteMakefile(
                            'LWP::Simple' => 0,
                            'JSON'        => 0,
                            'Test::More'  => '1.00',
+                           'Test::Deep'  => 0,
                         },
     ABSTRACT_FROM => 'lib/WWW/Gittip.pm',
     AUTHOR        => 'Gabor Szabo <szabgab@cpan.org>',
