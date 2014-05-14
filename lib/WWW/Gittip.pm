@@ -22,7 +22,7 @@ WWW::Gittip - Implementing the Gittip API more or less
 
 The API docs of Gittp: L<https://github.com/gittip/www.gittip.com#api>
 
-When necessary, you can get an API key from your account on Gittip at L<https://www.gittip.com/szabgab/account/>
+When necessary, you can get an API key from your account on Gittip at https://www.gittip.com/USERNAME/account/
 
 =head2 charts
 
