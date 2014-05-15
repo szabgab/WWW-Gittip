@@ -5,7 +5,7 @@ use warnings;
 use LWP::Simple qw(get);
 use JSON qw(from_json);
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 =head1 NAME
 
