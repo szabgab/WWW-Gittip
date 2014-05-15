@@ -73,7 +73,17 @@ sub user_charts {
 
 	my $url = "https://www.gittip.com/$username/charts.json";
 	my $charts = get $url;
-	return from_json $charts;
+	if (not defined $charts or $charts eq '') {
+		warn "Empty return\n";
+		return [];
+	}
+	my $data = eval { from_json $charts };
+	if ($@) {
+		warn $@;
+		warn "Data received: '$charts'\n";
+		$data = [];
+	}
+	return $data;
 }
 
 

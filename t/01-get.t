@@ -36,7 +36,7 @@ subtest charts => sub {
 };
 
 subtest user_chars => sub {
-	plan tests => 1;
+	plan tests => 2;
 	my $charts_user = WWW::Gittip->user_charts('szabgab');
 	#diag scalar @$charts_user;
 	#diag explain $charts_user;
@@ -60,6 +60,9 @@ subtest user_chars => sub {
 	#cmp_deeply $charts_user->[0], $user_chart_entry;
 	
 	cmp_deeply($charts_user, array_each($user_chart_entry), 'user_charts');
+
+	my $invalid = WWW::Gittip->user_charts('a/b');
+	cmp_deeply $invalid, [], 'invalid requets';
 };
 
 
