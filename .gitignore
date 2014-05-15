@@ -3,5 +3,6 @@ Makefile
 blib/
 pm_to_blib
 MANIFEST
+MANIFEST.bak
 WWW-Gittip-*
 *.swp
