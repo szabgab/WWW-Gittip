@@ -5,6 +5,7 @@ WriteMakefile(
     'VERSION_FROM'  => 'lib/WWW/Gittip.pm',
     'PREREQ_PM'     => {
                            'LWP::Simple' => 0,
+                           'LWP::Protocol::https' => '6.04',  # for https support
                            'JSON'        => 0,
                            'Test::More'  => '1.00',
                            'Test::Deep'  => 0,

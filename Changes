@@ -1,5 +1,7 @@
 Revision history for Perl extension WWW::Gittip.
 
+    - require LWP::Protocol::https
+
 0.01 2014-05-14
     - Initial release
 
