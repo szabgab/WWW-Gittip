@@ -72,18 +72,7 @@ sub user_charts {
 	#croak "Invalid username '$username'" if $username eq 'about';
 
 	my $url = "https://www.gittip.com/$username/charts.json";
-	my $charts = get $url;
-	if (not defined $charts or $charts eq '') {
-		warn "Empty return\n";
-		return [];
-	}
-	my $data = eval { from_json $charts };
-	if ($@) {
-		warn $@;
-		warn "Data received: '$charts'\n";
-		$data = [];
-	}
-	return $data;
+	_get($url);
 }
 
 
@@ -140,6 +129,23 @@ Not implemented yet.
 
 =cut
 
+
+sub _get {
+	my ($url) = @_;
+
+	my $charts = get $url;
+	if (not defined $charts or $charts eq '') {
+		warn "Empty return\n";
+		return [];
+	}
+	my $data = eval { from_json $charts };
+	if ($@) {
+		warn $@;
+		warn "Data received: '$charts'\n";
+		$data = [];
+	}
+	return $data;
+}
 
 
 
