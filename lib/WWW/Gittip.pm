@@ -44,8 +44,7 @@ Each element in the array has the following fields:
 
 sub charts {
 	my $url = "https://www.gittip.com/about/charts.json";
-	my $charts = get $url;
-	return from_json $charts;
+	return _get($url);
 }
 
 =head2 user_charts
@@ -72,7 +71,7 @@ sub user_charts {
 	#croak "Invalid username '$username'" if $username eq 'about';
 
 	my $url = "https://www.gittip.com/$username/charts.json";
-	_get($url);
+	return _get($url);
 }
 
 
@@ -103,8 +102,7 @@ Each element in the array has the following fields:
 
 sub paydays {
 	my $url = 'https://www.gittip.com/about/paydays.json';
-	my $charts = get $url;
-	return from_json $charts;
+	return _get($url);
 }
 
 =head2 stats
@@ -116,8 +114,7 @@ with lots of keys...
 
 sub stats {
 	my $url = 'https://www.gittip.com/about/stats.json';
-	my $charts = get $url;
-	return from_json $charts;
+	return _get($url);
 }
 
 =head2 community
