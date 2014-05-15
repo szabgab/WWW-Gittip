@@ -16,13 +16,13 @@ WWW::Gittip - Implementing the Gittip API more or less
   use WWW::Gittip;
   my $charts = WWW::Gittip->charts;
 
-  my $charts = WWW::Gittip->charts;
+  my $user_charts = WWW::Gittip->user_charts('szabgab');
 
 =head1 DESCIPTION
 
 The API docs of Gittp: L<https://github.com/gittip/www.gittip.com#api>
 
-When necessary, you can get an API key from your account on Gittip at https://www.gittip.com/USERNAME/account/
+When necessary, you can get an API key from your account on Gittip at L<https://www.gittip.com/about/me/account>
 
 =head2 charts
 
@@ -43,7 +43,35 @@ Each element in the array has the following fields:
 
 
 sub charts {
-	my $url = 'https://www.gittip.com/about/charts.json';
+	my $url = "https://www.gittip.com/about/charts.json";
+	my $charts = get $url;
+	return from_json $charts;
+}
+
+=head2 user_charts
+
+   WWW::Gittip->user_charts(USERNAME);
+
+Returns an array referene from /%username/charts.json
+Each element in the array has the following fields:
+
+   {
+     'date'     => '2012-06-08',
+     'npatrons' => 0,
+     'receipts' => '0',
+     'ts_start' => '2012-06-08T12:02:45.182409+00:00'
+   }
+
+
+=cut
+
+
+sub user_charts {
+	my ($self, $username) = @_;
+
+	#croak "Invalid username '$username'" if $username eq 'about';
+
+	my $url = "https://www.gittip.com/$username/charts.json";
 	my $charts = get $url;
 	return from_json $charts;
 }
@@ -92,6 +120,18 @@ sub stats {
 	my $charts = get $url;
 	return from_json $charts;
 }
+
+=head2 community
+
+See L<https://github.com/gittip/www.gittip.com/issues/2014>
+L<https://www.gittip.com/for/perl/?limit=20&offset=20>
+
+Not implemented yet.
+
+=cut
+
+
+
 
 =head1 AUTHOR
 
