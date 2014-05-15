@@ -112,19 +112,32 @@ with lots of keys...
 
 =cut
 
+
+
 sub stats {
 	my $url = 'https://www.gittip.com/about/stats.json';
 	return _get($url);
 }
 
-=head2 community
+=head2 communities
 
 See L<https://github.com/gittip/www.gittip.com/issues/2014>
+
 L<https://www.gittip.com/for/perl/?limit=20&offset=20>
 
-Not implemented yet.
+L<https://github.com/gittip/www.gittip.com/issues/2408>
+
+Currently only returns an empty list.
 
 =cut
+
+sub communities {
+	my $url = 'https://www.gittip.com/for/communities.json';
+	return _get($url);
+}
+
+# https://www.gittip.com/about/tip-distribution.json
+# returns an array of numbers \d+\.\d\d  (over 8000 entries), probably the full list of tips.
 
 
 sub _get {

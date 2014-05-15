@@ -5,7 +5,7 @@ use warnings;
 use Test::More;
 use Test::Deep;
 
-plan tests => 2;
+plan tests => 3;
 
 use WWW::Gittip;
 
@@ -65,6 +65,15 @@ subtest user_chars => sub {
 	cmp_deeply $invalid, [], 'invalid requets';
 };
 
+subtest communities => sub {
+	plan tests => 1;
+	my $empty = WWW::Gittip->communities;
+	#diag explain $data;
+	cmp_deeply $empty, {
+		'communities' => []
+	};
+	# If user is logged in, the method returns a list of all the communities.
+}
 
 #my $paydays = WWW::Gittip->paydays();
 #print Dumper $paydays;
