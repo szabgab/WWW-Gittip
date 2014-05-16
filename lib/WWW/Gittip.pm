@@ -2,8 +2,9 @@ package WWW::Gittip;
 use strict;
 use warnings;
 
-use LWP::Simple qw(get);
+use LWP::UserAgent;
 use JSON qw(from_json);
+
 
 our $VERSION = '0.02';
 
@@ -143,7 +144,17 @@ sub communities {
 sub _get {
 	my ($url) = @_;
 
-	my $charts = get $url;
+	my $ua = LWP::UserAgent->new;
+	$ua->timeout(10);
+
+	my $response = $ua->get($url);
+	if (not $response->is_success) {
+		warn "Failed request\n";
+		warn $response->status_line;
+		return [];
+	}
+
+	my $charts = $response->decoded_content;
 	if (not defined $charts or $charts eq '') {
 		warn "Empty return\n";
 		return [];
