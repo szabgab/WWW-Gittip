@@ -1,5 +1,6 @@
 Revision history for Perl extension WWW::Gittip.
 
+0.03 2014-05-17
     - Allow user to supply API_KEY and use it to authenticate with the server.
     - Switch to object methods from class methods.
     - Start using LWP::UserAgent instead of LWP::Simple
