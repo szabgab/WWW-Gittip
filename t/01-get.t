@@ -5,7 +5,7 @@ use warnings;
 use Test::More;
 use Test::Deep;
 
-plan tests => 3;
+plan tests => 4;
 
 use WWW::Gittip;
 
@@ -17,6 +17,9 @@ my $DATE = re('^\d\d\d\d-\d\d-\d\d$'),
 
 # '2012-06-15T11:09:54.298416+00:00'
 my $TIMESTAMP = re('^\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d\.\d+\+\d\d:\d\d$');
+
+my $gt = WWW::Gittip->new;
+isa_ok $gt, 'WWW::Gittip';
 
 subtest charts => sub {
 	plan tests => 1;
@@ -30,14 +33,14 @@ subtest charts => sub {
 		"withdrawals"  => $MONEY, 
 	};
 
-	my $charts = WWW::Gittip->charts();
+	my $charts = $gt->charts();
 	#diag scalar @$charts;
 	cmp_deeply($charts, array_each($chart_entry), 'charts');
 };
 
 subtest user_chars => sub {
 	plan tests => 2;
-	my $charts_user = WWW::Gittip->user_charts('szabgab');
+	my $charts_user = $gt->user_charts('szabgab');
 	#diag scalar @$charts_user;
 	#diag explain $charts_user;
 	my $user_chart_entry_old = {
@@ -61,13 +64,13 @@ subtest user_chars => sub {
 	
 	cmp_deeply($charts_user, array_each($user_chart_entry), 'user_charts');
 
-	my $invalid = WWW::Gittip->user_charts('a/b');
+	my $invalid = $gt->user_charts('a/b');
 	cmp_deeply $invalid, [], 'invalid requets';
 };
 
 subtest communities => sub {
 	plan tests => 1;
-	my $empty = WWW::Gittip->communities;
+	my $empty = $gt->communities;
 	#diag explain $data;
 	cmp_deeply $empty, {
 		'communities' => []

@@ -1,5 +1,6 @@
 Revision history for Perl extension WWW::Gittip.
 
+    - Switch to object methods from class methods.
     - Start using LWP::UserAgent instead of LWP::Simple
 
 0.02 2014-05-15
