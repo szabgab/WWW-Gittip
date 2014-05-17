@@ -5,6 +5,7 @@ WriteMakefile(
     'VERSION_FROM'  => 'lib/WWW/Gittip.pm',
     'PREREQ_PM'     => {
                            'LWP::UserAgent'       => '6.04',
+                           'MIME::Base64'         => 0,       # For Authentication header
                            'LWP::Protocol::https' => '6.04',  # for https support
                            'JSON'                 => 0,
 

@@ -29,9 +29,36 @@ When necessary, you can get an API key from your account on Gittip at L<https://
 =cut
 
 
+=head2 new
+
+  my $gt = WWW::Gittip->new;
+  my $gt = WWW::Gittip->new( api_key => '123-456' );
+
+
+=cut
+
 sub new {
-    my ($class) = @_;
-    bless {}, $class;
+	my ($class, %params) = @_;
+	bless \%params, $class;
+}
+
+=head2 api_key
+
+Set/Get the API_KEY
+
+  $gt->api_key('123-456');
+
+  my $api_key = $gt->api_key;
+
+=cut
+
+
+sub api_key {
+	my ($self, $value) = @_;
+	if (defined $value) {
+		$self->{api_key} = $value;
+	}
+	return $self->{api_key};
 }
 
 
@@ -54,7 +81,7 @@ Each element in the array has the following fields:
 
 
 sub charts {
-    my ($self) = @_;
+	my ($self) = @_;
 
 	my $url = "https://www.gittip.com/about/charts.json";
 	return $self->_get($url);
@@ -114,7 +141,7 @@ Each element in the array has the following fields:
 =cut
 
 sub paydays {
-    my ($self) = @_;
+	my ($self) = @_;
 
 	my $url = 'https://www.gittip.com/about/paydays.json';
 	return $self->_get($url);
@@ -130,7 +157,7 @@ with lots of keys...
 
 
 sub stats {
-    my ($self) = @_;
+	my ($self) = @_;
 
 	my $url = 'https://www.gittip.com/about/stats.json';
 	return $self->_get($url);
@@ -149,7 +176,7 @@ Currently only returns an empty list.
 =cut
 
 sub communities {
-    my ($self) = @_;
+	my ($self) = @_;
 
 	my $url = 'https://www.gittip.com/for/communities.json';
 	return $self->_get($url);
@@ -164,6 +191,12 @@ sub _get {
 
 	my $ua = LWP::UserAgent->new;
 	$ua->timeout(10);
+
+	my $api_key = $self->api_key;
+	if ($api_key) {
+		require MIME::Base64;
+		$ua->default_header('Authorization',  "Basic " . MIME::Base64::encode("$api_key:", '') );
+	}
 
 	my $response = $ua->get($url);
 	if (not $response->is_success) {

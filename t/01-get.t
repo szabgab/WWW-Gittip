@@ -5,7 +5,7 @@ use warnings;
 use Test::More;
 use Test::Deep;
 
-plan tests => 4;
+plan tests => 5;
 
 use WWW::Gittip;
 
@@ -75,8 +75,31 @@ subtest communities => sub {
 	cmp_deeply $empty, {
 		'communities' => []
 	};
+};
+
+subtest api_key => sub {
+	my $api_key = get_api_key();
+	if ($api_key) {
+		plan tests => 1;
+	} else {
+		plan skip_all => 'API_KEY is needed';
+	}
+
 	# If user is logged in, the method returns a list of all the communities.
-}
+	$gt->api_key($api_key);
+	my $communities = $gt->communities;
+
+	#diag explain $communities;
+	my $expected_community = {
+           'is_member' => isa('JSON::PP::Boolean'),
+           'name'      => re('^[\w., -]+$'),
+           'nmembers'  => re('^\d+$'),
+           'slug'      => re('^[\w-]+$'),
+    };
+	#cmp_deeply($communities->{communities}[0], $expected_community);
+	cmp_deeply($communities->{communities}, array_each($expected_community));
+
+};
 
 #my $paydays = WWW::Gittip->paydays();
 #print Dumper $paydays;
@@ -84,4 +107,21 @@ subtest communities => sub {
 #my $stats = WWW::Gittip->stats();
 #print Dumper $stats;
 
+exit;
+
+
+
+sub get_api_key {
+	my $gittiprc = "$ENV{HOME}/.gittip";
+	#die if not -e $gittiprc;
+	my %config;
+	if (open my $fh, '<', $gittiprc) {
+		while (my $row = <$fh>) {
+			chomp $row;
+			my ($field, $key) = split /=/,  $row;
+			$config{$field} = $key;
+		}
+	}
+	return $config{api_key};
+}
 
