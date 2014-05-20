@@ -16,19 +16,29 @@ my $gt = WWW::Gittip->new;
 if ($what eq 'charts') {
 	my $charts = $gt->charts();
 	print Dumper $charts;
+
 } elsif ($what eq 'user_charts') {
 	usage() if @params != 1;
 	my $charts = $gt->user_charts($params[0]);
 	print Dumper $charts;
+
+} elsif ($what eq 'user_public') {
+	usage() if @params != 1;
+	my $pub = $gt->user_public($params[0]);
+	print Dumper $pub;
+
 } elsif ($what eq 'paydays') {
 	my $paydays = $gt->paydays();
 	print Dumper $paydays;
+
 } elsif ($what eq 'stats') {
 	my $stats = $gt->stats();
 	print Dumper $stats;
+
 } elsif ($what eq 'communities') {
 	my $empty = $gt->communities();
 	print Dumper $empty;
+
 } elsif ($what eq 'mycommunities') {
 	#use File::HomeDir;
 	#my $gittiprc = File::HomeDir->my_home . '/.gittip';
@@ -55,6 +65,7 @@ sub usage {
 
 Usage: $0 [charts|paydays|stats|communities|mycommunities]
        $0 user_charts USERNAME
+       $0 user_public USERNAME
 
 END
 }

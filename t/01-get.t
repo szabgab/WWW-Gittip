@@ -5,7 +5,7 @@ use warnings;
 use Test::More;
 use Test::Deep;
 
-plan tests => 5;
+plan tests => 6;
 
 use WWW::Gittip;
 
@@ -77,6 +77,26 @@ subtest communities => sub {
 	};
 };
 
+subtest user_public => sub {
+	plan tests => 3+4;
+	my $pub = $gt->user_public('szabgab');
+	#diag explain $pub;
+	is $pub->{username}, 'szabgab', 'username';
+	is $pub->{id},       25031,     'id';
+	is $pub->{on},       'gittip',  'on';
+	foreach my $f (qw(giving receiving)) {
+		ok exists $pub->{$f};
+		if (defined $pub->{$f}) {
+			cmp_deeply $pub->{$f}, $MONEY, $f;
+		} else {
+			is $pub->{$f}, undef, $f;
+		}
+	}
+	#cmp_deeply $pub->{giving},    any($MONEY, undef), 'giving';
+	#cmp_deeply $pub->{receiving}, any($MONEY, undef), 'receiving';
+};
+
+
 subtest api_key => sub {
 	my $api_key = get_api_key();
 	if ($api_key) {
@@ -91,14 +111,13 @@ subtest api_key => sub {
 
 	#diag explain $communities;
 	my $expected_community = {
-           'is_member' => isa('JSON::PP::Boolean'),
-           'name'      => re('^[\w., -]+$'),
-           'nmembers'  => re('^\d+$'),
-           'slug'      => re('^[\w-]+$'),
-    };
+		'is_member' => isa('JSON::PP::Boolean'),
+		'name'      => re('^[\w., -]+$'),
+		'nmembers'  => re('^\d+$'),
+		'slug'      => re('^[\w-]+$'),
+	};
 	#cmp_deeply($communities->{communities}[0], $expected_community);
 	cmp_deeply($communities->{communities}, array_each($expected_community));
-
 };
 
 #my $paydays = WWW::Gittip->paydays();

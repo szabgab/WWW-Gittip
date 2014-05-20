@@ -182,6 +182,48 @@ sub communities {
 	return $self->_get($url);
 }
 
+=head2 user_public
+
+   $gt->user_public(USERNAME);
+
+Returns an hash referene from /%username/public.json
+Some of the fields look like these:
+
+
+    {
+          'id' => 25031,
+          'username' => 'szabgab',
+          'number' => 'singular',
+          'on' => 'gittip',
+          'giving' => undef,
+          'npatrons' => 7,
+          'receiving' => '5.01',
+          'goal' => undef,
+          'avatar' => 'https://avatars.githubusercontent.com/u/48833?s=128',
+          'bitcoin' => 'https://blockchain.info/address/1riba1Z6o3man18rASVyiG6NeFAhvf7rU',
+          'elsewhere' => {
+                           'github' => {
+                                         'user_id' => '48833',
+                                         'id' => 85177,
+                                         'user_name' => 'szabgab'
+                                       },
+                           'twitter' => {
+                                          'user_id' => '21182516',
+                                          'user_name' => 'szabgab',
+                                          'id' => 424525
+                                        }
+                         },
+    };
+
+=cut
+
+sub user_public {
+	my ($self, $username) = @_;
+
+	my $url = "https://www.gittip.com/$username/public.json";
+	return $self->_get($url);
+}
+
 # https://www.gittip.com/about/tip-distribution.json
 # returns an array of numbers \d+\.\d\d  (over 8000 entries), probably the full list of tips.
 
