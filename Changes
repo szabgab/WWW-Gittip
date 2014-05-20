@@ -1,5 +1,6 @@
 Revision history for Perl extension WWW::Gittip.
 
+0.04 2014-05-20
     - Add method user_public
     - Add method user_tips
     - Add method community_members
