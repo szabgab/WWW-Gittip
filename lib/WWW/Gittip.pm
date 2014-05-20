@@ -89,7 +89,7 @@ sub charts {
 
 =head2 user_charts
 
-   WWW::Gittip->user_charts(USERNAME);
+   $gt->user_charts(USERNAME);
 
 Returns an array referene from /%username/charts.json
 Each element in the array has the following fields:
