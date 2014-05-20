@@ -130,10 +130,16 @@ subtest paydays => sub {
 };
 
 subtest stats => sub {
-	plan tests => 1;
-	ok 1;
+	plan tests => 4+7;
+
 	my $stats = $gt->stats();
 	#diag explain $stats;
+	foreach my $f (qw(average_tip escrow total_backed_tips transfer_volume)) {
+    	cmp_deeply $stats->{$f}, $MONEY, $f;
+	}
+    foreach my $f (qw(tip_n nach nactive ncc ngivers noverlap nreceivers)) {
+    	cmp_deeply $stats->{$f}, $INT, $f;
+	}
 };
 
 
