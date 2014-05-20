@@ -51,6 +51,12 @@ if ($what eq 'charts') {
 	$gt->api_key($config->{api_key});
 	my $communities = $gt->communities();
 	print Dumper $communities;
+
+} elsif ($what eq 'community_members') {
+	usage() if @params != 1;
+	my $members = $gt->community_members($params[0]);
+	print Dumper $members;
+
 } else {
 	usage();
 }
@@ -63,6 +69,7 @@ Usage: $0 [charts|paydays|stats|communities|mycommunities]
        $0 user_charts USERNAME
        $0 user_public USERNAME
        $0 user_tips   USERNAME
+       $0 community_members COMMUNITY_NAME
 
 END
 }

@@ -5,7 +5,7 @@ use warnings;
 use Test::More;
 use Test::Deep;
 
-plan tests => 8;
+plan tests => 9;
 
 use WWW::Gittip;
 
@@ -23,6 +23,8 @@ my $TIMESTAMP = re('^\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d\.\d+\+\d\d:\d\d$');
 
 # 123
 my $INT = re('^\d+$');
+
+my $USERNAME = re('^[\w -]+$');
 
 my $gt = WWW::Gittip->new;
 isa_ok $gt, 'WWW::Gittip';
@@ -142,6 +144,18 @@ subtest stats => sub {
 	}
 };
 
+subtest community_members => sub {
+	plan tests => 4;
+	my $members = $gt->community_members('perl');
+	my $expected = {
+		name => $USERNAME,
+	};
+	cmp_ok scalar @{ $members->{new} }, '>', 500;
+	cmp_deeply($members->{new},     array_each($expected));
+	cmp_deeply($members->{give},    array_each($expected));
+	cmp_deeply($members->{receive}, array_each($expected));
+};
+
 
 subtest api_key => sub {
 	my $config = get_config();
@@ -167,7 +181,7 @@ subtest api_key => sub {
 
 	my $tips = $gt->user_tips($config->{username});
 	my $expected_tip = {
-		'username' => re('^\w+$'),
+		'username' => $USERNAME,
 		'platform' => 'gittip',
 		'amount'   => $MONEY,
 	};

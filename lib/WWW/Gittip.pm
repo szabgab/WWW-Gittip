@@ -251,8 +251,142 @@ sub user_tips {
 	return $self->_get($url);
 }
 
+=head2 community_members
 
-sub _get {
+  $gt->community_members('perl');
+
+Given the name of a community, returns a hash with 3 keys:
+new, give, and receive corresponding to the 3 columns of the
+https://www.gittip.com/for/perl page.
+
+Each key has an array reference as the value. Each arr has several elements:
+
+  {
+    new => [
+      {
+        name => 'szabgab',
+      },
+      {
+        name => 'rjbs',
+      },
+      ...
+    ],
+    give => [
+      ...
+    ],
+    receive => [
+      ...
+    ],
+  }
+
+There is no official API, so this call is scraping the HTML page.
+Currently Gittip limits the number of people shown in each column to 100. 
+
+The user could set the limt at a lower number using limit=... in the URL.
+The user can also set the starting user using offset=...
+
+WWW::Gittip sends multiple requests as necessary to fetch all the users.
+It uses limit=100 and the appropriate offset=  for each request.
+
+=cut
+
+sub community_members {
+	my ($self, $name) = @_;
+
+# limit=10
+# offset=12
+
+	my %NAMES = (
+		'New Members'   => 'new',
+		'Top Givers'    => 'give',
+		'Top Receivers' => 'receive',
+	);
+	use HTML::TreeBuilder 5 -weak;
+
+	my %members;
+
+	my $limit  = 100;
+	my $offset = 0;
+	my $total;
+	while (1) {
+		my $url = "https://www.gittip.com/for/$name?limit=$limit&offset=$offset";
+
+		print "Requesting: $url\n";
+
+		my $response = $self->_get_html($url);
+
+		if (not $response->is_success) {
+			warn 'Failed';
+			return;
+		}
+
+
+		my $html = $response->decoded_content;
+		my $tree = HTML::TreeBuilder->new;
+		$tree->parse($html);
+
+		if (not $total) {
+			# <div class="on-community">
+			#     <h2 class="pad-sign">Perl</h2>
+			#     <div class="number">516</div>
+			#     <div class="unit pad-sign">members</div>
+			# </div>
+			my $cl = $tree->look_down('class', 'on-community');
+			my $n = $cl->look_down('class', 'number');
+			$total = $n->as_text;
+		}
+
+		my $leaderboard = $tree->look_down('id', 'leaderboard');
+		foreach my $ch ($leaderboard->content_list) {
+			next if not defined $ch or ref($ch) ne 'HTML::Element';
+			# The page had 4 columns, one of them was empty.
+			my $h2 = $ch->look_down('_tag', 'h2');
+			my $type = $NAMES{ $h2->as_text };
+
+			my $group = $ch->look_down('class', 'group');
+			foreach my $member ($group->content_list) {
+				next if not defined $member or ref($member) ne 'HTML::Element';
+				# I think these are the anonymous members.
+
+				my $n = $member->look_down('class', 'name');
+				push @{ $members{$type} }, {
+					name => $n->as_text,
+				};
+			}
+		}
+
+		$offset++;
+		if (not $total) {
+			warn "Could not find total number of members\n";
+			last;
+		}
+		last if $offset*$limit >= $total;
+	}
+
+	return \%members;
+	
+#<div id="leaderboard">
+#
+#    <div class="people">
+#        <h2>New Members</h2>
+#        <ul class="group">
+#            
+#            <li>
+#                <a href="/dwierenga/" class="mini-user tip"
+#                data-tip="">
+#                    <span class="inner">
+#                        <span class="avatar"
+#                            style="background-image: url(\'https://avatars.githubusercontent.com/u/272648?s=128\')">
+#                        </span>
+#                        <span class="age">14 <span class="unit">hours</span></span>
+#                        <span class="name">dwierenga</span>
+#                    </span>
+#                </a>
+#            </li>
+
+}
+
+sub _get_html {
 	my ($self, $url) = @_;
 
 	my $ua = LWP::UserAgent->new;
@@ -265,6 +399,15 @@ sub _get {
 	}
 
 	my $response = $ua->get($url);
+	return $response;
+
+}
+
+
+sub _get {
+	my ($self, $url) = @_;
+
+	my $response = $self->_get_html($url);
 	if (not $response->is_success) {
 		warn "Failed request\n";
 		warn $response->status_line;
