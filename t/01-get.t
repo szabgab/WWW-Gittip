@@ -144,15 +144,15 @@ subtest stats => sub {
 
 
 subtest api_key => sub {
-	my $api_key = get_api_key();
-	if ($api_key) {
-		plan tests => 1;
+	my $config = get_config();
+	if ($config->{api_key}) {
+		plan tests => 2;
 	} else {
 		plan skip_all => 'API_KEY is needed';
 	}
 
 	# If user is logged in, the method returns a list of all the communities.
-	$gt->api_key($api_key);
+	$gt->api_key($config->{api_key});
 	my $communities = $gt->communities;
 
 	#diag explain $communities;
@@ -164,13 +164,22 @@ subtest api_key => sub {
 	};
 	#cmp_deeply($communities->{communities}[0], $expected_community);
 	cmp_deeply($communities->{communities}, array_each($expected_community));
+
+	my $tips = $gt->user_tips($config->{username});
+	my $expected_tip = {
+		'username' => re('^\w+$'),
+		'platform' => 'gittip',
+		'amount'   => $MONEY,
+	};
+
+	cmp_deeply($tips, array_each($expected_tip));
 };
 
 exit;
 
 
 
-sub get_api_key {
+sub get_config {
 	my $gittiprc = "$ENV{HOME}/.gittip";
 	#die if not -e $gittiprc;
 	my %config;
@@ -181,6 +190,6 @@ sub get_api_key {
 			$config{$field} = $key;
 		}
 	}
-	return $config{api_key};
+	return \%config;
 }
 

@@ -27,6 +27,13 @@ if ($what eq 'charts') {
 	my $pub = $gt->user_public($params[0]);
 	print Dumper $pub;
 
+} elsif ($what eq 'user_tips') {
+	usage() if @params != 1;
+	my $config = read_config();
+	$gt->api_key($config->{api_key});
+	my $tip = $gt->user_tips($params[0]);
+	print Dumper $tip;
+
 } elsif ($what eq 'paydays') {
 	my $paydays = $gt->paydays();
 	print Dumper $paydays;
@@ -40,19 +47,8 @@ if ($what eq 'charts') {
 	print Dumper $empty;
 
 } elsif ($what eq 'mycommunities') {
-	#use File::HomeDir;
-	#my $gittiprc = File::HomeDir->my_home . '/.gittip';
-
-	my $gittiprc = "$ENV{HOME}/.gittip";
-	#die if not -e $gittiprc;
-	my %config;
-	open my $fh, '<', $gittiprc or die "Could not open '$gittiprc'\n";
-	while (my $row = <$fh>) {
-		chomp $row;
-		my ($field, $key) = split /=/,  $row;
-		$config{$field} = $key;
-	}
-	$gt->api_key($config{api_key});
+	my $config = read_config();
+	$gt->api_key($config->{api_key});
 	my $communities = $gt->communities();
 	print Dumper $communities;
 } else {
@@ -66,6 +62,25 @@ sub usage {
 Usage: $0 [charts|paydays|stats|communities|mycommunities]
        $0 user_charts USERNAME
        $0 user_public USERNAME
+       $0 user_tips   USERNAME
 
 END
 }
+
+sub read_config {
+	#use File::HomeDir;
+	#my $gittiprc = File::HomeDir->my_home . '/.gittip';
+
+	my $gittiprc = "$ENV{HOME}/.gittip";
+	#die if not -e $gittiprc;
+	my %config;
+	open my $fh, '<', $gittiprc or die "Could not open '$gittiprc'\n";
+	while (my $row = <$fh>) {
+		chomp $row;
+		my ($field, $key) = split /=/,  $row;
+		$config{$field} = $key;
+	}
+	return \%config;
+}
+
+

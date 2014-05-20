@@ -227,6 +227,30 @@ sub user_public {
 # https://www.gittip.com/about/tip-distribution.json
 # returns an array of numbers \d+\.\d\d  (over 8000 entries), probably the full list of tips.
 
+=head2 user_tips
+
+Requires API_KEY.
+
+GET /%username/tips.json  and returns an array reference of hashes.
+Each hash is looks like this
+
+          {
+            'username' => 'perlweekly',
+            'platform' => 'gittip',
+            'amount' => '1.01'
+          }
+
+  $gt->user_tips($username);
+
+=cut
+
+sub user_tips {
+	my ($self, $username) = @_;
+
+	my $url = "https://www.gittip.com/$username/tips.json";
+	return $self->_get($url);
+}
+
 
 sub _get {
 	my ($self, $url) = @_;
