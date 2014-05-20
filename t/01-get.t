@@ -5,18 +5,24 @@ use warnings;
 use Test::More;
 use Test::Deep;
 
-plan tests => 6;
+plan tests => 8;
 
 use WWW::Gittip;
 
 # 123  or  123.3  or 123.45
 my $MONEY = re('\d+(\.\d\d?)?$');
 
+# like MONEY but can also accept - at the beginning
+my $NMONEY = re('-?\d+(\.\d\d?)?$');
+
 # '2012-06-15'
 my $DATE = re('^\d\d\d\d-\d\d-\d\d$'),
 
 # '2012-06-15T11:09:54.298416+00:00'
 my $TIMESTAMP = re('^\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d\.\d+\+\d\d:\d\d$');
+
+# 123
+my $INT = re('^\d+$');
 
 my $gt = WWW::Gittip->new;
 isa_ok $gt, 'WWW::Gittip';
@@ -96,6 +102,40 @@ subtest user_public => sub {
 	#cmp_deeply $pub->{receiving}, any($MONEY, undef), 'receiving';
 };
 
+subtest paydays => sub {
+	plan tests => 1;
+
+
+	my $expected_payday = {
+		'ach_fees_volume'    => $MONEY,
+		'ach_volume'         => $NMONEY,
+		'charge_fees_volume' => $MONEY,
+		'charge_volume'      => $MONEY,
+		'nachs'              => $INT,
+		'nactive'            => $INT, 
+		'ncc_failing'        => $INT,
+		'ncc_missing'        => $INT,
+		'ncharges'           => $INT,
+		'nparticipants'      => $INT,
+		'ntransfers'         => $INT,
+		'ntippers'           => $INT,
+		'transfer_volume'    => $MONEY,
+		'ts_end'             => $TIMESTAMP,
+		'ts_start'           => $TIMESTAMP,
+	};
+
+	my $paydays = $gt->paydays();
+	cmp_deeply($paydays, array_each($expected_payday), 'paydays');
+	#diag explain $paydays;
+};
+
+subtest stats => sub {
+	plan tests => 1;
+	ok 1;
+	my $stats = $gt->stats();
+	#diag explain $stats;
+};
+
 
 subtest api_key => sub {
 	my $api_key = get_api_key();
@@ -119,12 +159,6 @@ subtest api_key => sub {
 	#cmp_deeply($communities->{communities}[0], $expected_community);
 	cmp_deeply($communities->{communities}, array_each($expected_community));
 };
-
-#my $paydays = WWW::Gittip->paydays();
-#print Dumper $paydays;
-
-#my $stats = WWW::Gittip->stats();
-#print Dumper $stats;
 
 exit;
 
