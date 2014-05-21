@@ -4,9 +4,9 @@ use warnings;
 
 use LWP::UserAgent;
 use JSON qw(from_json);
+use HTML::TreeBuilder 5 -weak;
 
-
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 =head1 NAME
 
@@ -301,7 +301,6 @@ sub community_members {
 		'Top Givers'    => 'give',
 		'Top Receivers' => 'receive',
 	);
-	use HTML::TreeBuilder 5 -weak;
 
 	my %members;
 
@@ -355,12 +354,12 @@ sub community_members {
 			}
 		}
 
-		$offset++;
+		$offset += $limit;
 		if (not $total) {
 			warn "Could not find total number of members\n";
 			last;
 		}
-		last if $offset*$limit >= $total;
+		last if $offset >= $total;
 	}
 
 	return \%members;

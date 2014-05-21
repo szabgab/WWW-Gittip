@@ -1,5 +1,8 @@
 Revision history for Perl extension WWW::Gittip.
 
+0.05 2014-05-21
+    - Add prerequisite HTML::TreeBuilder missed in 0.04
+
 0.04 2014-05-20
     - Add method user_public
     - Add method user_tips

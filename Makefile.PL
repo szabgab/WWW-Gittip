@@ -8,6 +8,7 @@ WriteMakefile(
                            'MIME::Base64'         => 0,       # For Authentication header
                            'LWP::Protocol::https' => '6.04',  # for https support
                            'JSON'                 => 0,
+                           'HTML::TreeBuilder'    => '5.03',
 
                            'Test::More'           => '1.00',
                            'Test::Deep'           => 0,
