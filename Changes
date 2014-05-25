@@ -1,7 +1,7 @@
 Revision history for Perl extension WWW::Gittip.
 
-0.06 2014-05-22
-    - Fixed typo in DESCRIPTION heading, and added a first into paragraph.
+0.06 2014-05-25
+    - Fixed typo in DESCRIPTION heading, and added a first into paragraph. [NEILB]
 
 0.05 2014-05-21
     - Add prerequisite HTML::TreeBuilder missed in 0.04

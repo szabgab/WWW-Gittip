@@ -6,7 +6,7 @@ use LWP::UserAgent;
 use JSON qw(from_json);
 use HTML::TreeBuilder 5 -weak;
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 =head1 NAME
 
