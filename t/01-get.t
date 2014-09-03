@@ -187,10 +187,11 @@ subtest api_key => sub {
 
 	#diag explain $communities;
 	my $expected_community = {
-		'is_member' => isa('JSON::PP::Boolean'),
+		#'is_member' => isa('JSON::PP::Boolean'),
 		'name'      => re('^[\w., -]+$'),
 		'nmembers'  => re('^\d+$'),
 		'slug'      => re('^[\w-]+$'),
+		'ctime'     => $TIMESTAMP,
 	};
 	#cmp_deeply($communities->{communities}[0], $expected_community);
 	cmp_deeply($communities->{communities}, array_each($expected_community));
