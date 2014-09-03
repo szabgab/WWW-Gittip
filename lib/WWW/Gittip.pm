@@ -7,6 +7,7 @@ use JSON qw(from_json);
 use HTML::TreeBuilder 5 -weak;
 
 our $VERSION = '0.06';
+my $BASE_URL = 'https://www.gittip.com';
 
 =head1 NAME
 
@@ -88,7 +89,7 @@ Each element in the array has the following fields:
 sub charts {
 	my ($self) = @_;
 
-	my $url = "https://www.gittip.com/about/charts.json";
+	my $url = "$BASE_URL/about/charts.json";
 	return $self->_get($url);
 }
 
@@ -115,7 +116,7 @@ sub user_charts {
 
 	#croak "Invalid username '$username'" if $username eq 'about';
 
-	my $url = "https://www.gittip.com/$username/charts.json";
+	my $url = "$BASE_URL/$username/charts.json";
 	return $self->_get($url);
 }
 
@@ -148,7 +149,7 @@ Each element in the array has the following fields:
 sub paydays {
 	my ($self) = @_;
 
-	my $url = 'https://www.gittip.com/about/paydays.json';
+	my $url = "$BASE_URL/about/paydays.json";
 	return $self->_get($url);
 }
 
@@ -164,7 +165,7 @@ with lots of keys...
 sub stats {
 	my ($self) = @_;
 
-	my $url = 'https://www.gittip.com/about/stats.json';
+	my $url = "$BASE_URL/about/stats.json";
 	return $self->_get($url);
 }
 
@@ -183,7 +184,7 @@ Currently only returns an empty list.
 sub communities {
 	my ($self) = @_;
 
-	my $url = 'https://www.gittip.com/for/communities.json';
+	my $url = "$BASE_URL/for/communities.json";
 	return $self->_get($url);
 }
 
@@ -225,7 +226,7 @@ Some of the fields look like these:
 sub user_public {
 	my ($self, $username) = @_;
 
-	my $url = "https://www.gittip.com/$username/public.json";
+	my $url = "$BASE_URL/$username/public.json";
 	return $self->_get($url);
 }
 
@@ -252,7 +253,7 @@ Each hash is looks like this
 sub user_tips {
 	my ($self, $username) = @_;
 
-	my $url = "https://www.gittip.com/$username/tips.json";
+	my $url = "$BASE_URL/$username/tips.json";
 	return $self->_get($url);
 }
 
@@ -313,7 +314,7 @@ sub community_members {
 	my $offset = 0;
 	my $total;
 	while (1) {
-		my $url = "https://www.gittip.com/for/$name?limit=$limit&offset=$offset";
+		my $url = "$BASE_URL/for/$name?limit=$limit&offset=$offset";
 
 		print "Requesting: $url\n";
 
