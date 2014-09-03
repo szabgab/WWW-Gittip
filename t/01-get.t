@@ -24,7 +24,7 @@ my $TIMESTAMP = re('^\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d\.\d+\+\d\d:\d\d$');
 # 123
 my $INT = re('^\d+$');
 
-my $USERNAME = re('^[\w -]+$');
+my $USERNAME = re('^[\w .-]+$');
 
 my $gt = WWW::Gittip->new;
 isa_ok $gt, 'WWW::Gittip';
@@ -91,7 +91,7 @@ subtest user_public => sub {
 	#diag explain $pub;
 	is $pub->{username}, 'szabgab', 'username';
 	is $pub->{id},       25031,     'id';
-	is $pub->{on},       'gittip',  'on';
+	is $pub->{on},       'gratipay',  'on';
 	foreach my $f (qw(giving receiving)) {
 		ok exists $pub->{$f};
 		if (defined $pub->{$f}) {
