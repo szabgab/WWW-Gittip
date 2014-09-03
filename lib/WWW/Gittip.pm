@@ -6,7 +6,7 @@ use LWP::UserAgent;
 use JSON qw(from_json);
 use HTML::TreeBuilder 5 -weak;
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 my $BASE_URL = 'https://www.gratipay.com';
 
 =head1 NAME

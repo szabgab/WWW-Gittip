@@ -1,5 +1,9 @@
 Revision history for Perl extension WWW::Gittip.
 
+0.07 2014-09-03
+    - Match changes in the service that broke the code.
+    - Start using the new http://www.gratipay.com/ URL.
+
 0.06 2014-05-25
     - Fixed typo in DESCRIPTION heading, and added a first into paragraph. [NEILB]
 
