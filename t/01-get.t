@@ -4,6 +4,7 @@ use warnings;
 
 use Test::More;
 use Test::Deep;
+#use Test::Warn;
 
 plan tests => 9;
 
@@ -47,7 +48,7 @@ subtest charts => sub {
 };
 
 subtest user_chars => sub {
-	plan tests => 2;
+	plan tests => 3;
 	my $charts_user = $gt->user_charts('szabgab');
 	#diag scalar @$charts_user;
 	#diag explain $charts_user;
@@ -72,7 +73,22 @@ subtest user_chars => sub {
 	
 	cmp_deeply($charts_user, array_each($user_chart_entry), 'user_charts');
 
-	my $invalid = $gt->user_charts('a/b');
+	my $invalid;
+	{
+		my @warnings;
+		local $SIG{__WARN__} = sub { push @warnings, $_[0] };
+		$invalid = $gt->user_charts('a/b');
+		$_ =~ s/[\r\n]*$// for @warnings;
+		#diag explain \@warnings;
+		is_deeply \@warnings, [
+			q{Failed request https://www.gratipay.com/a/b/charts.json},
+			q{404 Not Found},
+		], 'expected warnings';
+	}
+	#warnings_are { $invalid = $gt->user_charts('a/b') } [
+	#	qq{Failed request https://www.gratipay.com/a/b/charts.json},
+	#	qq{404 Not Found},
+	#], 'expected warnings';
 	cmp_deeply $invalid, [], 'invalid requets';
 };
 

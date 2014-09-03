@@ -416,8 +416,8 @@ sub _get {
 
 	my $response = $self->_get_html($url);
 	if (not $response->is_success) {
-		warn "Failed request\n";
-		warn $response->status_line;
+		warn "Failed request $url\n";
+		warn $response->status_line . "\n";
 		return [];
 	}
 

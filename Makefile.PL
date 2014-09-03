@@ -12,7 +12,8 @@ WriteMakefile(
                         },
     "TEST_REQUIRES" => {
                            'Test::More'           => '1.00',
-                           'Test::Deep'           => 0,
+                           'Test::Deep'           => '0.113',
+                           'Test::Warn'           => '0.30',
     },
     ABSTRACT_FROM => 'lib/WWW/Gittip.pm',
     AUTHOR        => 'Gabor Szabo <szabgab@cpan.org>',
