@@ -7,11 +7,11 @@ use JSON qw(from_json);
 use HTML::TreeBuilder 5 -weak;
 
 our $VERSION = '0.06';
-my $BASE_URL = 'https://www.gittip.com';
+my $BASE_URL = 'https://www.gratipay.com';
 
 =head1 NAME
 
-WWW::Gittip - Implementing the Gittip API more or less
+WWW::Gittip - Implementing the Gittip (now Gratipay) API. More or less.
 
 =head1 SYNOPSIS
 
@@ -23,14 +23,14 @@ WWW::Gittip - Implementing the Gittip API more or less
 
 =head1 DESCRIPTION
 
-This module provides a Perl interface to the L<Gittip|http://www.gittip.com> API.
+This module provides a Perl interface to the L<Gratipay|http://www.gratipay.com> API.
 Gittip describes itself as "a way to give small weekly cash gifts to people you
 love and are inspired by". It is one way you can give small recurring amounts to
 people who've written open source software that you regularly use.
 
 The API docs of Gittp: L<https://github.com/gittip/www.gittip.com#api>
 
-When necessary, you can get an API key from your account on Gittip at L<https://www.gittip.com/about/me/account>
+When necessary, you can get an API key from your account on Gittip at L<https://www.gratipay.com/about/me/account>
 
 =cut
 
@@ -173,7 +173,9 @@ sub stats {
 
 See L<https://github.com/gittip/www.gittip.com/issues/2014>
 
-L<https://www.gittip.com/for/perl/?limit=20&offset=20>
+L<https://www.gratipay.com/for/perl/?limit=20>
+
+L<https://www.gratipay.com/for/perl/?limit=20&offset=20>
 
 L<https://github.com/gittip/www.gittip.com/issues/2408>
 
@@ -230,7 +232,7 @@ sub user_public {
 	return $self->_get($url);
 }
 
-# https://www.gittip.com/about/tip-distribution.json
+# https://www.gratipay.com/about/tip-distribution.json
 # returns an array of numbers \d+\.\d\d  (over 8000 entries), probably the full list of tips.
 
 =head2 user_tips
@@ -263,7 +265,7 @@ sub user_tips {
 
 Given the name of a community, returns a hash with 3 keys:
 new, give, and receive corresponding to the 3 columns of the
-https://www.gittip.com/for/perl page.
+https://www.gratipay.com/for/perl page.
 
 Each key has an array reference as the value. Each arr has several elements:
 
